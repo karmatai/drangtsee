@@ -1,0 +1,33 @@
+/* Basic CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+.menu-bar {
+    background-color: #222 !important;
+    padding: 15px;
+    display: flex;
+    justify-content: space-evenly;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+  
+.menu-item {
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 18px;
+    padding: 100px 10px;
+    transition: background-color 0.3s ease;
+}
+  
+.menu-item:hover {
+    background-color: #444;
+    border-radius: 5px;
+}
+  
+.menu-item.active {
+    border-bottom: 2px solid #fff;
+}
+  
