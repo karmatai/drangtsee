@@ -7,12 +7,14 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import { Box } from '@mui/material';
 
 const latestLyrics = [{ 
   title: "༧གོང་ས་མཆོག་འཛམ་གླིང་གི་ཉི་མ།", 
   singer: "ཨ་མཆོག་མགོན་པོ།", 
   lyricist:"ཁ་སྒང་སྤྱན་འབངས།", 
   composer:"ཡོན་ཏན་མགོན་པོ།",
+  thumbnailurl:"http://img.youtube.com/vi/inzBJEM-ckA/hqdefault.jpg",
   lyrics: "ནངས་སྔ་མོའི་སྐྱ་རེངས་ཀྱི་འཛུམ་གདངས། \n \
   འཛུམ་མདངས་དེའི་ཁྲོད་ན། \n \
   དད་སེམས་དང་གསོལ་འདེབས་དབྱངས་ལ་འགུག་བཞིན་ང་ཚོས། \n \
@@ -77,7 +79,76 @@ const latestLyrics = [{
   སུ་གང་མཉམ་དུ་སྐར་ཆ་གཅིག་ཀྱང་། \n \
   བསྡད་འདོད་མེད་ལ་འཚོ་བ་བསྐྱལ་འདོད་མེད"}
   ,
-  
+  { 
+    title: "༧གོང་ས་མཆོག་འཛམ་གླིང་གི་ཉི་མ།", 
+    singer: "ཨ་མཆོག་མགོན་པོ།", 
+    lyricist:"ཁ་སྒང་སྤྱན་འབངས།", 
+    composer:"ཡོན་ཏན་མགོན་པོ།",
+    thumbnailurl:"http://img.youtube.com/vi/inzBJEM-ckA/hqdefault.jpg",
+    lyrics: "ནངས་སྔ་མོའི་སྐྱ་རེངས་ཀྱི་འཛུམ་གདངས། \n \
+    འཛུམ་མདངས་དེའི་ཁྲོད་ན། \n \
+    དད་སེམས་དང་གསོལ་འདེབས་དབྱངས་ལ་འགུག་བཞིན་ང་ཚོས། \n \
+    འཛམ་གླིང་གི་སེམས་དཔའ་ཆེན་མོའི་འཁྲུངས་སྐར་བསུ། \n \
+    ༧གོང་ས་མཆོག་ལ་སྐུ་ཚེ་ཁྲི་ལོར་བརྟན་པར་ཤོག \n \
+    སྨོན་འདུན་དང་དགོད་སྒྲ་ངག་ལ་གྱེར་ནས། \n \
+    བོད་གཞིས་བྱེས་གཉིས་ནས་འཁྲུངས་སྐར་བསུ། \n \
+    ཨོ་ཧོ།  འཁྲུངས་སྐར་ལ་རྟེན་འབྲེལ་ཞུ། འཁྲུངས་སྐར་ལ་རྟེན་འབྲེལ་ཞུ། \n \
+    ༧གོང་ས་རྒྱལ་བ་བསྟན་འཛིན་རྒྱ་མཚོ་ཡི། \n \
+    འཁྲུངས་སྐར་ལ་བཀྲ་ཤིས་སྨོན་འདུན་ཞུ། \n \
+    སྨོན་འདུན་ཞུ། \n \
+    ནངས་སྔ་མོའི་སྐྱ་རེངས་ཀྱི་འཛུམ་གདངས། \n \
+    འཛུམ་མདངས་དེའི་ཁྲོད་ན། \n \
+    ལྷ་བསང་དང་རླུང་རྟ་དགུང་ལ་གཏོར་བཞིན་ང་ཚོས། \n \
+    འཛམ་གླིང་གི་སེམས་དཔའ་ཆེན་མོའི་འཁྲུངས་སྐར་བསུ། \n \
+    ༧གོང་ས་མཆོག་ལ་སྐུ་ཚེ་ཁྲི་ལོར་བརྟན་པར་ཤོག \n \
+    ཁ་གཡང་དང་ལྷ་དར་ལག་ལ་བཟུང་ནས། \n \
+    བོད་གཞིས་བྱེས་གཉིས་ནས་འཁྲུངས་སྐར་བསུ། \n \
+    ཨོ་ཧོ།  འཁྲུངས་སྐར་ལ་རྟེན་འབྲེལ་ཞུ། འཁྲུངས་སྐར་ལ་རྟེན་འབྲེལ་ཞུ། \n \
+    ༧གོང་ས་རྒྱལ་བ་བསྟན་འཛིན་རྒྱ་མཚོ་ཡི། \n \
+    འཁྲུངས་སྐར་ལ་བཀྲ་ཤིས་སྨོན་འདུན་ཞུ། \n \
+    སྨོན་འདུན་ཞུ། \n \
+    ཨོ་ཧོ།  འཁྲུངས་སྐར་ལ་རྟེན་འབྲེལ་ཞུ། འཁྲུངས་སྐར་ལ་རྟེན་འབྲེལ་ཞུ། \n \
+    ༧གོང་ས་རྒྱལ་བ་བསྟན་འཛིན་རྒྱ་མཚོ་ཡི། \n \
+    འཁྲུངས་སྐར་ལ་བཀྲ་ཤིས་སྨོན་འདུན་ཞུ། \n \
+    སྨོན་འདུན་ཞུ། \n \
+    འཁྲུངས་སྐར་ལ་བཀྲ་ཤིས་སྨོན་འདུན་ཞུ། \n \
+    སྨོན་འདུན་ཞུ།"},
+    {
+      "title": "རང་མ་གཏོགས།",
+      "singer": "ཚེ་དབང་ནོར་བུ།",
+      "lyricist": "ཚེ་དབང་ནོར་བུ།",
+      "composer": "ཚེ་དབང་ནོར་བུ།",
+      "lyrics": "བསམ་རྒྱུ་རང་ལས་མི་འདུག  \n \
+    དྲན་རྒྱུ་རང་ལས་མི་འདུག  \n \
+    ཆུ་ཚོད་ཉི་ཤུ་རྩ་བཞི། སྐར་མ་ཆིག་སྟོང་བཞི་བརྒྱ་བཞི་བཅུ།  \n \
+    རང་གཅིག་པོ་ལས་མི་འདུག  \n \
+    ངའི་སྙིང་ཁང་ནི་ཁྱེད་རང་གཅིག་པོའི་གནས་ས་ཡིན།  \n \
+    ངའི་ལག་པ་ཁྱེད་རང་གཅིག་པོར་མ་གཏོགས་གཏོང་འདོད་མེད།  \n \
+    ངའི་རེ་བར་བུ་ཆུང་ཁྱེད་རང་མ་གཏོགས།  \n \
+    སུ་གང་མཉམ་དུ་སྐར་ཆ་གཅིག་ཀྱང་།  \n \
+    བསྡད་འདོད་མེད་ལ་འཚོ་བ་བསྐྱལ་འདོད་མེད།  \n \
+    ལས་དབང་དེ་ནི་ཆོ་ཚ་བ། རང་དང་འཕྲད་པ་དེ་གང་རེད།  \n \
+    བརྩེ་དུང་དེ་ནི་དགོད་བྲོ་བ། དང་ཐོག་དེ་འདྲ་མ་རེད།  \n \
+    རང་ནི་དེ་འདྲའི་ཤེས་དཀའ་བ། འཆར་གཞི་ག་རེ་ཡོད་མེད།  \n \
+    ང་གཉིས་བརྩེ་དུང་ནང་དིམ་ནས་ འཕུར་འགྲོ་འཕུར་འགྲོ  \n \
+    བསམ་རྒྱུ་རང་ལས་མི་འདུག  \n \
+    དྲན་རྒྱུ་རང་ལས་མི་འདུག  \n \
+    ཆུ་ཚོད་ཉི་ཤུ་རྩ་བཞི། སྐར་མ་ཆིག་སྟོང་བཞི་བརྒྱ་བཞི་བཅུ།  \n \
+    རང་གཅིག་པོ་ལས་མི་འདུག  \n \
+    རང་ཆེད་དུ་འཚོ་བ་བློས་བཏང་རུང་འགྱོད་པ་མེད།  \n \
+    རང་ཆེད་དུ་ཕུགས་བསམ་བློས་བཏང་རུང་འགྱོད་པ་མེད།  \n \
+    རང་ཆེད་དུ་ཡོད་ཚད་བློས་བཏང་རུང་།  \n \
+    ང་གཉིས་ལག་པ་བཏང་ནས།  \n \
+    མཉམ་དུ་འཚོ་བ་བསྐྱལ་རྒྱུའི་སེམས་ཤུགས་སེམས་ཤུགས་ཡོད།  \n \
+    དབུགས་བཏང་ དབུགས་བཏང་ \n \
+    རང་མཉམ་དུ་དབུགས་བཏང་། \n \
+    རང་མཉམ་དུ་འཚོ་བ་བསྐྱལ་རྒྱུའི་སེམས་ཤུགས་ཡོད། \n \
+    ངའི་སྙིང་ཁང་ནི་ཁྱེད་རང་གཅིག་པོའི་གནས་ས་ཡིན། \n \
+    ངའི་ལག་པ་ཁྱེད་རང་གཅིག་པོར་མ་གཏོགས་གཏོང་འདོད་མེད། \n \
+    ངའི་རེ་བར་བུ་ཆུང་ཁྱེད་རང་མ་གཏོགས། \n \
+    སུ་གང་མཉམ་དུ་སྐར་ཆ་གཅིག་ཀྱང་། \n \
+    བསྡད་འདོད་མེད་ལ་འཚོ་བ་བསྐྱལ་འདོད་མེད"}
+    ,
     {
       "title": "སེམས་ཀྱི་མེ་ཏོག",
       "singer": "གཤེར་བརྟེན",
@@ -131,47 +202,68 @@ function Home() {
       marginLeft:'10%',
     }}>
       <h1>གཞས་ཚིག་གསར་སྣོན།</h1>
-      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' , ml:'10%'}}>
+      <List sx={{ width: '100%', maxWidth: 700, bgcolor: 'background.paper' , ml:'10%'}}>
         {latestLyrics.map((song, index) => (
           <React.Fragment key={index}>
-            <ListItem alignItems="flex-start">
+            <ListItem alignItems="flex-start" >
               <ListItemAvatar>
-                <Avatar alt={song.singer} src="/static/images/avatar/1.jpg" />
+                <Avatar alt={song.singer} src={song.thumbnailurl} />
               </ListItemAvatar>
               <ListItemText
-                primary={
-                  <Link to={`/songs/${encodeURIComponent(song.title)}`} style={{textDecoration:'none'}}>
-                    {song.title}
-                  </Link>
-                }
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      sx={{ color: 'text.primary', display: 'block', textAlign: 'left' ,ml:'50%'}}
-                    >
-                      གཞས་པ། {song.singer}
-                    </Typography>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      sx={{ color: 'text.primary', display: 'block', textAlign: 'left', ml:'50%'}}
-                    >
-                      གདངས། {song.composer}
-                    </Typography>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      sx={{ color: 'text.primary', display: 'block', textAlign: 'left' , ml:'50%'}}
-                    >
-                      ཚིག {song.lyricist}
-                    </Typography>
-
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
+  primary={
+    <Link to={`/songs/${encodeURIComponent(song.title)}`} style={{ textDecoration: 'none' }}>
+      {song.title}
+    </Link>
+  }
+  secondary={
+    <React.Fragment>
+      <Box
+        sx={{
+          display: 'flex', // Flexbox to manage layout
+          flexDirection: 'row', // Align items in a row (image + text)
+          alignItems: 'flex-start', // Align items at the start
+          gap: 2, // Add spacing between the image and the text
+        }}
+      >
+        <Box
+          component="img"
+          sx={{
+            height: 233,
+            width: 350,
+            maxHeight: { xs: 233, md: 167 },
+            maxWidth: { xs: 350, md: 250 },
+          }}
+          alt="The house from the offer."
+          src={song.thumbnailurl}
+        />
+        <Box>
+          <Typography
+            component="span"
+            variant="body2"
+            sx={{ color: 'text.primary', display: 'block', textAlign: 'left' }}
+          >
+            གཞས་པ། {song.singer}
+          </Typography>
+          <Typography
+            component="span"
+            variant="body2"
+            sx={{ color: 'text.primary', display: 'block', textAlign: 'left' }}
+          >
+            གདངས། {song.composer}
+          </Typography>
+          <Typography
+            component="span"
+            variant="body2"
+            sx={{ color: 'text.primary', display: 'block', textAlign: 'left' }}
+          >
+            ཚིག {song.lyricist}
+          </Typography>
+        </Box>
+      </Box>
+    </React.Fragment>
+  }
+/>
+</ListItem>
             <Divider variant="inset" component="li" />
           </React.Fragment>
         ))}
@@ -181,3 +273,4 @@ function Home() {
 }
 
 export default Home;
+export {latestLyrics};

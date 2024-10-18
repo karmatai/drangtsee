@@ -11,14 +11,20 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import logo from '../../logo.jpg';
 
 const pages = [
-  { name: 'Home', link: '/' },
-  { name: 'Songs', link: '/songs' },
-  { name: 'Artists', link: '/artists' },
-  { name: 'About Us', link: '/about' }
+  { name: 'མདུན་ངོས།', link: '/' },
+  { name: 'གླུ་གཞས།', link: '/songs' },
+  { name: 'གཞས་པ།', link: '/artists' },
+  { name: 'ང་ཚོའི་སྐོར།', link: '/about' }
 ];
+
+const MyIcon = () => (
+  <Avatar src={logo} variant="rounded"/>
+  
+  /*<Box component="img" src={logo} alt="Your image description" sx={{width}}/>*/
+);
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -43,10 +49,10 @@ function MenuComponent() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{bgcolor:"#f5c442"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <MyIcon/>
           <Typography
             variant="h6"
             noWrap
@@ -54,6 +60,7 @@ function MenuComponent() {
             href="/"
             sx={{
               mr: 2,
+              ml: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
@@ -62,7 +69,7 @@ function MenuComponent() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            སྦྲང་བརྩི།
           </Typography>
 
           {/* For mobile view */}
@@ -108,7 +115,7 @@ function MenuComponent() {
           </Box>
 
           {/* For desktop view */}
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          
           <Typography
             variant="h5"
             noWrap
@@ -125,7 +132,7 @@ function MenuComponent() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+          སྦྲང་བརྩི།
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (

@@ -33,8 +33,8 @@ const latestLyrics = [
 {
   "title": "རང་མ་གཏོགས།",
   "singer": "ཚེ་དབང་ནོར་བུ།",
-  "lyricist": "Unknown",
-  "composer": "Unknown",
+  "lyricist": "ཚེ་དབང་ནོར་བུ།",
+  "composer": "ཚེ་དབང་ནོར་བུ།",
   "lyrics": "བསམ་རྒྱུ་རང་ལས་མི་འདུག  \n \
 དྲན་རྒྱུ་རང་ལས་མི་འདུག  \n \
 ཆུ་ཚོད་ཉི་ཤུ་རྩ་བཞི། སྐར་མ་ཆིག་སྟོང་བཞི་བརྒྱ་བཞི་བཅུ།  \n \
@@ -69,7 +69,9 @@ const latestLyrics = [
 
   {
     "title": "སེམས་ཀྱི་མེ་ཏོག",
-    "singer": "གཤེར་བརྟེན",
+    "singer": "གཤེར་བརྟེན།",
+    composer: "གཤེར་བརྟེན།",
+    lyricist: "གཤེར་བརྟེན།",
     "lyrics": "ངའི་མེ་ཏོག  ངའི་སྙིང་སྡུག \n \
 ཞལ་རས་དུང་གི་ཟླ་བ་རེད། \n \
 ཟླ་་བ་རེད། ཟླ་བ་ལྷ་མོའི་འཛུམ། \n \
@@ -122,10 +124,20 @@ function SongDetail() {
   }
 
   return (
-    <div>
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
       <h1>{song.title}</h1>
-      <h2>{song.artist}</h2>
-      <p>{song.lyrics}</p>
+      <div style={{marginLeft:"12%"}}>
+      <p style={{textAlign:"right"}}>གཞས་པ། {song.singer}</p>
+      <p style={{textAlign:"right"}}>ཚིག {song.lyricist}</p>
+      <p style={{textAlign:"right"}}>གདངས། {song.composer}</p>
+      </div>
+      
+
+      <div>
+        {song.lyrics.split('\n').map((line, index) => (
+          <p key={index} >{line}</p>
+        ))}
+      </div>
     </div>
   );
 }

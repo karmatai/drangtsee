@@ -9,13 +9,10 @@ import Divider from '@mui/material/Divider';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { latestLyrics } from '../Home';
 
 // Sample lyrics data (replace with real data)
-const latestLyrics = [
-  { title: "སྐད་ཅིག་རྩལ།", artist: "Artist 1", lyrics: "བསམ་ཡས་ལྷུན་གྲུབ་..." },
-  { title: "བསྟན་བཤད།", artist: "Artist 2", lyrics: "མཚན་གྲུབ་བུམ་དཀར་..." },
-  { title: "དགེ་བཤེས།", artist: "Artist 3", lyrics: "འགྱུར་མཐའ་བསྒྲགས་བཞིན་..." },
-];
+
 
 // Comparator function for sorting in Tibetan alphabetical order
 const tibetanSort = (a, b) => {
@@ -25,7 +22,8 @@ const tibetanSort = (a, b) => {
 // Function to group songs by their first letter
 const groupSongsByFirstLetter = (songs) => {
   return songs.reduce((acc, song) => {
-    const firstLetter = song.title[0]; // Get the first letter of the song title
+    const cleanTitle = song.title.replace(/[^ཀ-ྼa-zA-Z]/g, ''); // Remove non-alphabet characters, keeping Tibetan and English alphabets
+    const firstLetter = cleanTitle ? cleanTitle[0] : null; // Get the first valid Tibetan letter
     if (!acc[firstLetter]) {
       acc[firstLetter] = [];
     }
@@ -47,13 +45,13 @@ function SongDetail() {
   const song = sortedSongs.find(song => song.title === decodeURIComponent(title));
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, ml: "10%" }}>
       <Typography variant="h4" component="div" sx={{ my: 2 }}>
-        {song ? song.title : "Song not found"}
+        གླུ་གཞས།
       </Typography>
 
-      <Box sx={{ flex: 1, overflowY: 'auto', maxHeight: '300px' }}>
-        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <Box sx={{ flex: 1, overflowY: 'auto', maxHeight: '༩༠༵' }}>
+        <List sx={{ width: '100%', bgcolor: 'background.paper',ml:"10%" }}>
           {Object.keys(groupedSongs).map((letter, index) => (
             <React.Fragment key={index}>
               <Typography variant="h6" sx={{ mt: 2, ml: 2 }}>
@@ -65,11 +63,34 @@ function SongDetail() {
                 <React.Fragment key={songIndex}>
                   <ListItem alignItems="flex-start">
                   <ListItemAvatar>
-                  <Avatar alt={song.artist} src="/static/images/avatar/1.jpg" />
+                  <Avatar alt={song.artist} src={song.thumbnailurl} />
                   </ListItemAvatar>
                     <ListItemText
-                      primary={<Link to={`/songs/${encodeURIComponent(song.title)}`}>{song.title}</Link>}
-                      secondary={<Typography variant="body2" color="text.secondary">{song.artist}</Typography>}
+                      primary={<Link to={`/songs/${encodeURIComponent(song.title)}`} style={{textDecoration:"None"}}>{song.title}</Link>}
+                      secondary={
+                        <React.Fragment>
+                        <Box
+                          sx={{
+                            display: 'flex', // Flexbox to manage layout
+                            flexDirection: 'row', // Align items in a row (image + text)
+                            alignItems: 'flex-start', // Align items at the start
+                            gap: 2, // Add spacing between the image and the text
+                          }}
+                        >
+                          <Box
+                            component="img"
+                            sx={{
+                              height: 233,
+                              width: 350,
+                              maxHeight: { xs: 233, md: 167 },
+                              maxWidth: { xs: 350, md: 250 },
+                            }}
+                            alt="The house from the offer."
+                            src={song.thumbnailurl}
+                          />
+                      <Typography variant="body2" color="text.secondary">-  {song.singer}</Typography>
+                      </Box>
+                      </React.Fragment>}
                     />
                   </ListItem>
                   <Divider variant="inset" component="li" />
