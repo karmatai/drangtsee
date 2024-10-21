@@ -6,6 +6,7 @@ import Artists from './pages/Artists';
 import AboutUs from './pages/AboutUs';
 import MenuComponent from './pages/MenuComponents';
 import SongDetail from './pages/SongDetail';
+import ArtistDetailPage from './pages/ArtistDetail';
 import './App.css';
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
             <Route path="/artists" element={<Artists />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/songs/:title" element={<SongDetail />} />
-
+            <Route path="/artist/:singer" element={<ArtistDetailPage />}/>
           </Routes>
         </main>
       </div>

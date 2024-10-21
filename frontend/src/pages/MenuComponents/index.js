@@ -52,7 +52,8 @@ function MenuComponent() {
     <AppBar position="static" sx={{bgcolor:"#f5c442"}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <MyIcon/>
+          <MyIcon component="a"
+            href="/"/>
           <Typography
             variant="h6"
             noWrap
@@ -64,7 +65,7 @@ function MenuComponent() {
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '.0.1rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
@@ -104,6 +105,8 @@ function MenuComponent() {
                 <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                   <Typography
                     component="a"
+                    variant='h2'
+                    fontWeight={7000}
                     href={page.link}
                     sx={{ textAlign: 'center', color: 'inherit', textDecoration: 'none' }}
                   >
@@ -140,7 +143,7 @@ function MenuComponent() {
                 key={page.name}
                 href={page.link}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'white', display: 'block', fontSize:'1.4rem'}}
               >
                 {page.name}
               </Button>
