@@ -12,42 +12,87 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from '../../logo.jpg';
-
-const pages = [
-  { name: 'མདུན་ངོས།', link: '/' },
-  { name: 'གླུ་གཞས།', link: '/songs' },
-  { name: 'གཞས་པ།', link: '/artists' },
-  { name: 'ང་ཚོའི་སྐོར།', link: '/about' }
-];
+import { useTranslation } from 'react-i18next';
+import Switch from '@mui/material/Switch';
+import { useState,useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
+import { auth, onAuthStateChanged, logout } from '../../firebase_setup/firebase';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
 const MyIcon = () => (
   <Avatar src={logo} variant="rounded"/>
   
-  /*<Box component="img" src={logo} alt="Your image description" sx={{width}}/>*/
+  
 );
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+
 
 function MenuComponent() {
+
+  const { t, i18n} = useTranslation();
+  const [checked, setChecked] = useState(i18n.language === 'tib');
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const navigate = useNavigate();
+  const handleLogout=() => {
+    logout()
+      .then(() => {
+        console.log('User signed out successfully');
+        navigate('/signin'); // Redirect to login page after logout
+      })
+      .catch((error) => {
+        console.error('Error signing out:', error);
+      });
+  };
+  const settings = [
+    {name:t('setting.profile')},
+    {name:t('setting.setting')}, 
+    {name:t('setting.logout'),onClick:  handleLogout}
+  ];
+  const pages = [
+    { name: t('pages.home'), link: '/' },
+    { name: t('pages.songs'), link: '/songs' },
+    { name: t('pages.artist'), link: '/artists' },
+    { name: t('pages.about'), link: '/about' }
+  ];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
+  useEffect(() => {
+    setChecked(i18n.language === 'tib');
+  }, [i18n.language]);;
+  const handleLanguageChange = (event) => {
+    const newLanguage = event.target.checked ? 'tib' : 'eng';
+    i18n.changeLanguage(newLanguage);
+    setChecked(event.target.checked);
+  };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsSignedIn(true);
+      } else {
+        setIsSignedIn(false);
+        //navigate('/signin'); // Redirect to sign-in page if not signed in
+      }
+    });
+  
+    return () => unsubscribe();
+  });
+  const handleSignIn=() => {
+    navigate('/signin');
+  };
+  
   return (
     <AppBar position="static" sx={{bgcolor:"#f5c442"}}>
       <Container maxWidth="xl">
@@ -149,11 +194,18 @@ function MenuComponent() {
               </Button>
             ))}
           </Box>
-
+          <Switch 
+        checked={checked}
+        onChange={handleLanguageChange}
+        name="languageSwitch"
+        inputProps={{ 'aria-label': 'language switch' }}/>
+        {
+          <Typography sx={{mr:'4px'}}>{checked?"བོད།":"ENG"}</Typography>
+        }
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <IconButton onClick={isSignedIn?handleOpenUserMenu:handleSignIn} sx={{ p: 0 }}>
+                <PersonOutlineIcon/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -173,8 +225,8 @@ function MenuComponent() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                  <Typography textalign="center" onClick={setting.onClick} style={{ cursor: 'pointer' }}>{setting.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>

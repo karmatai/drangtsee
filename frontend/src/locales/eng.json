@@ -1,0 +1,20 @@
+
+{
+    "setting": {
+      "profile": "Profile",
+      "setting": "Settings",
+      "logout": "Logout"
+    },
+    "pages": {
+      "home": "Home",
+      "songs": "Songs",
+      "artist": "Artists",
+      "about": "About"
+    },
+    "signin": {
+      "title":"SIGN IN",
+      "subtitle":"Please sign in to continue"
+    }
+    
+  }
+  
