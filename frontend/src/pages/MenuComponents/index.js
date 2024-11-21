@@ -18,14 +18,28 @@ import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { auth, onAuthStateChanged, logout } from '../../firebase_setup/firebase';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import { alpha, styled } from '@mui/material/styles';
+
 
 const MyIcon = () => (
   <Avatar src={logo} variant="rounded"/>
-  
-  
 );
 
-
+const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  flexShrink: 0,
+  borderRadius: `calc(${theme.shape.borderRadius}px + 8px)`,
+  backdropFilter: 'blur(24px)',
+  border: '1px solid',
+  borderColor: (theme.vars || theme).palette.divider,
+  backgroundColor: theme.vars
+    ? `rgba(${theme.vars.palette.background.defaultChannel} / 0.4)`
+    : alpha(theme.palette.background.default, 0.4),
+  boxShadow: (theme.vars || theme).shadows[1],
+  padding: '8px 12px',
+}));
 
 function MenuComponent() {
 
@@ -94,8 +108,17 @@ function MenuComponent() {
   };
   
   return (
-    <AppBar position="static" sx={{bgcolor:"#f5c442"}}>
+    <AppBar position="fixed"
+    enableColorOnDark
+    sx={{
+      boxShadow: 0,
+      bgcolor: 'transparent',
+      backgroundImage: 'none',
+      mt: 'calc(var(--template-frame-height, 0px) + 28px)',
+    }}>
       <Container maxWidth="xl">
+      <StyledToolbar variant="dense" disableGutters>
+
         <Toolbar disableGutters>
           <MyIcon component="a"
             href="/"/>
@@ -232,6 +255,7 @@ function MenuComponent() {
             </Menu>
           </Box>
         </Toolbar>
+        </StyledToolbar>
       </Container>
     </AppBar>
   );

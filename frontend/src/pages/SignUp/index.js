@@ -16,13 +16,7 @@ import { AppProvider } from '@toolpad/core/AppProvider';
 import { SignInPage } from '@toolpad/core/SignInPage';
 import { useTheme } from '@mui/material/styles';
 
-const providers = [
-  { id: 'credentials', name: 'Email and Password' },
-  { id: 'google', name: 'Google' },
-  { id: 'facebook', name: 'Facebook' },
-
-
-];
+const providers = [{ id: 'credentials', name: 'Email and Password' }];
 
 function CustomEmailField() {
   return (
@@ -106,23 +100,17 @@ function CustomButton() {
   );
 }
 
-function SignUpLink() {
-  return (
-    <Link href="/signup" variant="body2">
-      Sign up
-    </Link>
-  );
-}
-
-function ForgotPasswordLink() {
+function SignInLink() {
   return (
     <Link href="/" variant="body2">
-      Forgot password?
+      Sign In
     </Link>
   );
 }
 
-export default function SignIn() {
+
+
+export default function SignUp() {
   const theme = useTheme();
   return (
     <div>
@@ -137,8 +125,8 @@ export default function SignIn() {
           emailField: CustomEmailField,
           passwordField: CustomPasswordField,
           submitButton: CustomButton,
-          signUpLink: SignUpLink,
-          forgotPasswordLink: ForgotPasswordLink,
+          signUpLink: SignInLink,
+          
         }}
         providers={providers}
       />
