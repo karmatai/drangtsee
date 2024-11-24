@@ -8,15 +8,24 @@ import MenuComponent from './pages/MenuComponents';
 import SongDetail from './pages/SongDetail';
 import ArtistDetailPage from './pages/ArtistDetail';
 import SignInPage from './pages/SignIn';
+import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
+import AppTheme from './shared-theme/AppTheme';
 import './App.css';
 import './i18n'; 
 
-function App() {
+
+function App(props) {
   return (
     <Router>
-      <div className="app">
+      <AppTheme {...props}>
         <MenuComponent/>
-        <main>
+        <CssBaseline enableColorScheme />
+        <Container
+        maxWidth="lg"
+        component="main"
+        sx={{ display: 'flex', flexDirection: 'column', my: 16, gap: 4 }}
+        >
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/songs" element={<Songs />} />
@@ -26,8 +35,8 @@ function App() {
             <Route path="/artist/:singer" element={<ArtistDetailPage />}/>
             <Route path='/signin' element={<SignInPage/>}/>
           </Routes>
-        </main>
-      </div>
+        </Container>
+      </AppTheme>
     </Router>
   );
 }

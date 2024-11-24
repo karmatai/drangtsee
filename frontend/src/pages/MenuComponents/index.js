@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, onAuthStateChanged, logout } from '../../firebase_setup/firebase';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { alpha, styled } from '@mui/material/styles';
+import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 
 
 const MyIcon = () => (
@@ -118,106 +119,32 @@ function MenuComponent() {
     }}>
       <Container maxWidth="xl">
       <StyledToolbar variant="dense" disableGutters>
-
-        <Toolbar disableGutters>
+      <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
+        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <MyIcon component="a"
             href="/"/>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              ml: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.0.1rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            སྦྲང་བརྩི།
-          </Typography>
-
-          {/* For mobile view */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography
-                    component="a"
-                    variant='h2'
-                    fontWeight={7000}
-                    href={page.link}
-                    sx={{ textAlign: 'center', color: 'inherit', textDecoration: 'none' }}
-                  >
-                    {page.name}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-          {/* For desktop view */}
-          
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-          སྦྲང་བརྩི།
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+          <Button variant="text" color="info" size="small">སྦྲང་བརྩི།</Button>
+          {pages.map((page) => (
               <Button
                 key={page.name}
                 href={page.link}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block', fontSize:'1.4rem'}}
+                variant="text" color="info" size="small"
               >
                 {page.name}
               </Button>
             ))}
-          </Box>
-          <Switch 
+        </Box>
+      </Box>
+      <Box 
+        sx={{
+          display: { xs: 'none', md: 'flex' },
+          gap: 1,
+          alignItems: 'center',
+        }}
+      > 
+      <Button color="primary" variant="text" size="small">
+      <Switch 
         checked={checked}
         onChange={handleLanguageChange}
         name="languageSwitch"
@@ -225,14 +152,17 @@ function MenuComponent() {
         {
           <Typography sx={{mr:'4px'}}>{checked?"བོད།":"ENG"}</Typography>
         }
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={isSignedIn?handleOpenUserMenu:handleSignIn} sx={{ p: 0 }}>
-                <PersonOutlineIcon/>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
+      </Button>
+      <Button color="primary" variant="text" size="small">
+      <Tooltip title="Open settings">
+        <IconButton onClick={!isSignedIn?handleOpenUserMenu:handleSignIn} sx={{ p: 0 }}>
+          <PersonOutlineIcon/>
+          </IconButton>
+      </Tooltip>
+      </Button>
+      <ColorModeIconDropdown />
+        <Menu
+            sx={{ mt: '45px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -248,14 +178,17 @@ function MenuComponent() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
+                
                 <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Typography textalign="center" onClick={setting.onClick} style={{ cursor: 'pointer' }}>{setting.name}</Typography>
+                  <Button color="primary" variant="text" size="small">
+                    <Typography textalign="center" onClick={setting.onClick} style={{ cursor: 'pointer' }}>{setting.name}</Typography>
+                  </Button>
                 </MenuItem>
               ))}
-            </Menu>
-          </Box>
-        </Toolbar>
-        </StyledToolbar>
+        </Menu>
+      </Box>
+
+      </StyledToolbar>
       </Container>
     </AppBar>
   );
