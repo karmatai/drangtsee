@@ -7,7 +7,9 @@ import AboutUs from './pages/AboutUs';
 import MenuComponent from './pages/MenuComponents';
 import SongDetail from './pages/SongDetail';
 import ArtistDetailPage from './pages/ArtistDetail';
-import SignInPage from './pages/SignIn';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import Footer from './pages/Footer';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import AppTheme from './shared-theme/AppTheme';
@@ -33,9 +35,11 @@ function App(props) {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/songs/:title" element={<SongDetail />} />
             <Route path="/artist/:singer" element={<ArtistDetailPage />}/>
-            <Route path='/signin' element={<SignInPage/>}/>
+            <Route path='/signin' element={<SignIn/>}/>
+            <Route path='/signup' element={<SignUp/>}/>
           </Routes>
         </Container>
+        <Footer/>
       </AppTheme>
     </Router>
   );

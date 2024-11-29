@@ -151,9 +151,7 @@ function Author({ authors }) {
             />
           ))}
         </AvatarGroup>
-        <IconButton onClick={handleLike} aria-hidden="true" style={{ border: 'none' }}>
-          {liked?<FavoriteIcon fontSize='large'/>:<FavoriteBorderIcon fontSize='large'/>}
-        </IconButton>
+          {liked?<FavoriteIcon onClick={handleLike} fontSize='large'/>:<FavoriteBorderIcon onClick={handleLike} fontSize='large'/>}
       </Box>
       <Typography variant="caption">July 14, 2021</Typography>
     </Box>

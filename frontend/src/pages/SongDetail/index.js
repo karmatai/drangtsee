@@ -1,8 +1,16 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import { Typography,useMediaQuery, useTheme,  } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import Paper from '@mui/material/Paper';
+import CardMedia from '@mui/material/CardMedia';
 
 const latestLyrics = [
-  { title: "༧གོང་ས་མཆོག་འཛམ་གླིང་གི་ཉི་མ།", singer: "ཨ་མཆོག་མགོན་པོ།", lyricist:"ཁ་སྒང་སྤྱན་འབངས།", composer:"ཡོན་ཏན་མགོན་པོ།",lyrics: "ནངས་སྔ་མོའི་སྐྱ་རེངས་ཀྱི་འཛུམ་གདངས། \n \
+  { title: "༧གོང་ས་མཆོག་འཛམ་གླིང་གི་ཉི་མ།", singer: "ཨ་མཆོག་མགོན་པོ།", lyricist:"ཁ་སྒང་སྤྱན་འབངས།",  thumbnailurl:"http://img.youtube.com/vi/inzBJEM-ckA/hqdefault.jpg",composer:"ཡོན་ཏན་མགོན་པོ།",lyrics: "ནངས་སྔ་མོའི་སྐྱ་རེངས་ཀྱི་འཛུམ་གདངས། \n \
 འཛུམ་མདངས་དེའི་ཁྲོད་ན། \n \
 དད་སེམས་དང་གསོལ་འདེབས་དབྱངས་ལ་འགུག་བཞིན་ང་ཚོས། \n \
 འཛམ་གླིང་གི་སེམས་དཔའ་ཆེན་མོའི་འཁྲུངས་སྐར་བསུ། \n \
@@ -113,32 +121,135 @@ const latestLyrics = [
   }  
 ];
 
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
 function SongDetail() {
   const { title } = useParams();
-  
+  const [value, setValue] = React.useState(0);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  }
   // Find the song by its title
   const song = latestLyrics.find(song => song.title === decodeURIComponent(title));
-
+  
   if (!song) {
     return <h2>Song not found!</h2>;
   }
-
   return (
-    <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-      <h1>{song.title}</h1>
-      <div style={{marginLeft:"12%"}}>
-      <p style={{textAlign:"right"}}>གཞས་པ། {song.singer}</p>
-      <p style={{textAlign:"right"}}>ཚིག {song.lyricist}</p>
-      <p style={{textAlign:"right"}}>གདངས། {song.composer}</p>
-      </div>
-      
+    <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Grid container spacing={2} columns={12} width={'100%'} justifyContent={'center'}>
+      {isSmallScreen ? (
+        <>
+          <Grid item xs={12}>
+            <Typography variant='h1' gutterBottom>{song.title}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={song.thumbnailurl}
+              sx={{
+                aspectRatio: '1 / 1',
+                width: '10rem',
+                height: 'auto',
+              }}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center" gap={1}>
+              <Typography variant='body2' gutterBottom>{song.singer}</Typography>
+              <Typography variant='body2' gutterBottom>{song.composer}</Typography>
+              <Typography variant='body2' gutterBottom>ཁོར་ཐག</Typography>
+            </Box>
+          </Grid>
+        </>
+      ) : (
+        <>
+          <Grid item md={3}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              image={song.thumbnailurl}
+              sx={{
+                aspectRatio: '1 / 1',
+                width: '10rem',
+                height: 'auto',
+              }}
+            />
+          </Grid>
+          <Grid item md={9}>
+            <Box display="flex" flexDirection="column" justifyContent="center">
+              <Typography variant='h1' gutterBottom>{song.title}</Typography>
+              <Box display="flex" flexDirection="row" alignItems="center" gap={1}>
+                <Typography variant='body2' gutterBottom>{song.singer}</Typography>
+                <Typography variant='body2' gutterBottom>{song.composer}</Typography>
+                <Typography variant='body2' gutterBottom>ཁོར་ཐག</Typography>
+              </Box>
+            </Box>
+          </Grid>
+        </>
+      )}
+      <Grid item xs={12}>
+        <Paper align="center" 
+        sx={{ py: 5,
+        minWidth: { xs: '20rem', sm: '30rem', md: '40rem' }, 
+        minHeight: '60rem',
+        display: 'flex', 
+        flexDirection: 'column', justifyContent: 'space-between' }}>
+          <CustomTabPanel value={value} index={0}>
+            {song.lyrics.split('\n').map((line, index) => (
+              <Typography variant='body2' fontSize={30} gutterBottom={true} key={line}>{line}</Typography>
+            ))}
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+          <Typography variant='body2' fontSize={30} gutterBottom={true} >དོན་བརྙེད་མ་སོང་། དོན་གསར་པ་ཆུག</Typography>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+          <Typography variant='body2' fontSize={30} gutterBottom={true} >དོན་བརྙེད་མ་སོང་། དོན་གསར་པ་ཆུག</Typography>
+          </CustomTabPanel>
+          <Box sx={{ mt: 'auto' }}>
+            <Tabs value={value} onChange={handleChange} centered>
+              <Tab label="བོད་སྐད།" {...a11yProps(0)} />
+              <Tab label="དོན།" {...a11yProps(1)} />
+              <Tab label="དབྱིན་འགྱུར།" {...a11yProps(2)} />
+            </Tabs>
+          </Box>
+        </Paper>
+      </Grid>
+    </Grid>
+  </Box>
 
-      <div>
-        {song.lyrics.split('\n').map((line, index) => (
-          <p key={index} >{line}</p>
-        ))}
-      </div>
-    </div>
+    
+   
   );
 }
 

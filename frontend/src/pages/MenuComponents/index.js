@@ -20,6 +20,9 @@ import { auth, onAuthStateChanged, logout } from '../../firebase_setup/firebase'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { alpha, styled } from '@mui/material/styles';
 import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
+import Drawer from '@mui/material/Drawer';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import Divider from '@mui/material/Divider';
 
 
 const MyIcon = () => (
@@ -48,6 +51,11 @@ function MenuComponent() {
   const [checked, setChecked] = useState(i18n.language === 'tib');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
   const handleLogout=() => {
     logout()
       .then(() => {
@@ -69,6 +77,7 @@ function MenuComponent() {
     { name: t('pages.artist'), link: '/artists' },
     { name: t('pages.about'), link: '/about' }
   ];
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const handleOpenNavMenu = (event) => {
@@ -120,10 +129,9 @@ function MenuComponent() {
       <Container maxWidth="xl">
       <StyledToolbar variant="dense" disableGutters>
       <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
+        <MyIcon component="a"href="/"/>
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <MyIcon component="a"
-            href="/"/>
-          <Button variant="text" color="info" size="small">སྦྲང་བརྩི།</Button>
+          <Button variant="text" color="info" size="small">སྦྲང་ཚང་།</Button>
           {pages.map((page) => (
               <Button
                 key={page.name}
@@ -155,9 +163,7 @@ function MenuComponent() {
       </Button>
       <Button color="primary" variant="text" size="small">
       <Tooltip title="Open settings">
-        <IconButton onClick={!isSignedIn?handleOpenUserMenu:handleSignIn} sx={{ p: 0 }}>
-          <PersonOutlineIcon/>
-          </IconButton>
+          <PersonOutlineIcon onClick={isSignedIn?handleOpenUserMenu:handleSignIn}/>
       </Tooltip>
       </Button>
       <ColorModeIconDropdown />
@@ -187,7 +193,61 @@ function MenuComponent() {
               ))}
         </Menu>
       </Box>
-
+      <Box sx={{ display: { xs: 'flex', md: 'none' }, gap: 1 }}>
+            <ColorModeIconDropdown size="medium" />
+            <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
+              <MenuIcon />
+            </IconButton>
+            <Drawer
+              anchor="top"
+              open={open}
+              onClose={toggleDrawer(false)}
+              PaperProps={{
+                sx: {
+                  top: 'var(--template-frame-height, 0px)',
+                },
+              }}
+            >
+              <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
+              <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <PersonOutlineIcon/>
+                
+                  <IconButton onClick={toggleDrawer(false)}>
+                    <CloseRoundedIcon />
+                  </IconButton>
+                </Box>
+                {pages.map((page) => (
+                <MenuItem key={page.name} href={page.link}> {page.name} </MenuItem>
+                ))}
+                <Divider sx={{ my: 3 }} />
+                {isSignedIn ? (
+                  <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth>
+                    Sign Out
+                  </Button>
+                  </MenuItem>
+                ): (
+                  <>
+                  <MenuItem>
+                  <Button color="primary" variant="contained" fullWidth>
+                    Sign up
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button color="primary" variant="outlined" fullWidth>
+                    Sign in
+                  </Button>
+                </MenuItem>
+                  </>  
+                )} 
+              </Box>
+            </Drawer>
+          </Box>
       </StyledToolbar>
       </Container>
     </AppBar>
