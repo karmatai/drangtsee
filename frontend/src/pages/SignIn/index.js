@@ -14,9 +14,9 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { GoogleIcon, FacebookIcon } from './CustomIcons';
 import AppTheme from '../../shared-theme/AppTheme';
-import ColorModeSelect from '../../shared-theme/ColorModeSelect';
+import { signInWithGoogle, logInWithEmailAndPassword, sendPasswordReset } from '../../firebase_setup/firebase';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -75,16 +75,15 @@ export default function SignIn(props) {
     setOpen(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (emailError || passwordError) {
-      event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const email = data.get('email');
+    const password = data.get('password');
+    await logInWithEmailAndPassword(email, password);
   };
 
   const validateInputs = () => {
@@ -199,7 +198,7 @@ export default function SignIn(props) {
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert('Sign in with Google')}
+              onClick={signInWithGoogle}
               startIcon={<GoogleIcon />}
             >
               Sign in with Google
@@ -213,7 +212,7 @@ export default function SignIn(props) {
               Sign in with Facebook
             </Button>
             <Typography sx={{ textAlign: 'center' }}>
-              Don&apos;t have an account?{' '}
+              Don't have an account?{' '}
               <Link
                 href="/signup"
                 variant="body2"

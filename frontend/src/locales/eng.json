@@ -9,7 +9,8 @@
       "home": "Home",
       "songs": "Songs",
       "artist": "Artists",
-      "about": "About"
+      "about": "About",
+      "contributor":"Bees"
     },
     "signin": {
       "title":"SIGN IN",

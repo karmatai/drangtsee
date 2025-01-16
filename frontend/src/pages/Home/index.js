@@ -10,8 +10,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid2';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -19,7 +17,9 @@ import {  styled } from '@mui/material/styles';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { IconButton } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useNavigate } from 'react-router-dom';
+
 
 const cardData = [
   {
@@ -82,11 +82,13 @@ const cardData = [
 
 const SyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   padding: 0,
-  height: '100%',
+  height: '10rem',
+  borderRight:'none',
+  borderLeft:'none',
   backgroundColor: (theme.vars || theme).palette.background.paper,
-  
+  alignItems:'center',
   '&:focus-visible': {
     outline: '3px solid',
     outlineColor: 'hsla(210, 98%, 48%, 0.5)',
@@ -103,8 +105,10 @@ const SyledCardContent = styled(CardContent)({
   display: 'flex',
   flexDirection: 'column',
   gap: 4,
-  padding: 16,
+  padding: 0,
   flexGrow: 1,
+  justifyContent:'center',
+  alignItems:'center',
   '&:last-child': {
     paddingBottom: 16,
   },
@@ -123,39 +127,47 @@ const StyledTypography = styled(Typography)({
 
 function Author({ authors }) {
   const [liked, setLiked] = useState(false);
-
   const handleLike = () => {
     setLiked(!liked);
   };
   return (
     <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 2,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '16px',
-      }}
-    >
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
-      >
-        <AvatarGroup max={3}>
-          {authors.map((author, index) => (
-            <Avatar
-              key={index}
-              alt={author.name}
-              src={author.avatar}
-              sx={{ width: 24, height: 24 }}
-            />
-          ))}
-        </AvatarGroup>
-          {liked?<FavoriteIcon onClick={handleLike} fontSize='large'/>:<FavoriteBorderIcon onClick={handleLike} fontSize='large'/>}
-      </Box>
-      <Typography variant="caption">July 14, 2021</Typography>
-    </Box>
-  );
+  sx={{
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 2,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '16px',
+  }}
+>
+  <Box
+    sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}
+  >
+    <AvatarGroup max={3} sx={{ display: { xs: 'none', sm: 'flex' } }}>
+      {authors.map((author, index) => (
+        <Avatar
+          key={index}
+          alt={author.name}
+          src={author.avatar}
+          sx={{ width: 24, height: 24 }}
+        />
+      ))}
+    </AvatarGroup>
+    {liked ? (
+      <FavoriteIcon onClick={handleLike} fontSize="large" />
+    ) : (
+      <FavoriteBorderIcon onClick={handleLike} fontSize="large" />
+    )}
+  </Box>
+  <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={0.5}>
+  <Typography variant="caption">2021,23</Typography>
+  <VisibilityIcon fontSize='sm'/>
+  </Box>
+  
+  
+</Box>
+  )
 }
 
 Author.propTypes = {
@@ -190,7 +202,7 @@ export function Search() {
 
 function Home() {
   const [focusedCardIndex, setFocusedCardIndex] = React.useState(null);
-
+  const navigate = useNavigate();
   const handleFocus = (index) => {
     setFocusedCardIndex(index);
   };
@@ -199,9 +211,9 @@ function Home() {
     setFocusedCardIndex(null);
   };
 
-  const handleClick = () => {
-    console.info('You clicked the filter chip.');
-  };
+  const handleAddSong =() => {
+    navigate('/addsong');
+  }
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -209,7 +221,23 @@ function Home() {
         <Typography variant="h1" gutterBottom>
         སྦྲང་ཚང་།
         </Typography>
+        <Box sx={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
         <Typography>ཁ་བ་རི་པའི་གླུ་གར་གྱི་གར་སྟེགས་ལ་འཕེབས་པ་དགའ་བསུ་བཞུ།</Typography>
+        <Typography alignSelf={'end'} variant='caption' sx={{display:{xs:'flex',sm:'none'}}} onClick={handleAddSong}>Add a song</Typography>
+        <Box
+          sx={{
+            display: { xs: 'none', sm: 'flex' },
+            flexDirection: 'row',
+            gap: 1,
+            width: { xs: '100%', md: 'fit-content' },
+            overflow: 'auto',
+            justifyItems:'flex-end'
+          }}
+        >
+        <Typography alignSelf={'end'} variant='caption' sx={{textDecoration:'underline'}} onClick={handleAddSong}>Add a song</Typography>
+        <Search />  
+        </Box>
+        </Box> 
     </div>
     <Box
         sx={{
@@ -221,91 +249,28 @@ function Home() {
         }}
       >
         <Search />
-        
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column-reverse', md: 'row' },
-          width: '100%',
-          justifyContent: 'space-between',
-          alignItems: { xs: 'start', md: 'center' },
-          gap: 4,
-          overflow: 'auto',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'inline-flex',
-            flexDirection: 'row',
-            gap: 3,
-            overflow: 'auto',
-          }}
-        >
-          <Chip onClick={handleClick} size="medium" label="All categories" />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="Company"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="Product"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="Design"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
-          <Chip
-            onClick={handleClick}
-            size="medium"
-            label="Engineering"
-            sx={{
-              backgroundColor: 'transparent',
-              border: 'none',
-            }}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: { xs: 'none', sm: 'flex' },
-            flexDirection: 'row',
-            gap: 1,
-            width: { xs: '100%', md: 'fit-content' },
-            overflow: 'auto',
-          }}
-        >
-          <Search />
-          
-        </Box>
-      </Box>
-      
-      <Grid container spacing={2} >
+    </Box>
+    <Typography variant='h3' gutterBottom>
+      གླུ་གཞས་ལྟ་གྲངས་མང་ཤོས།
+    </Typography> 
+    <Box display={'flex'} flexDirection={'column'} minWidth={'100%'}>
+      {//<Grid container spacing={2} >
+      }
       {latestLyrics.map((song, index) => (
-        
-        <Grid item key={index} size={{ xs: 12, md: 6, lg:4 }}>
-        
+        //<Grid item key={index} size={{ xs: 12, md: 6, lg:4 }}>
+          
           <SyledCard
             variant="outlined"
             onFocus={() => handleFocus(0)}
             onBlur={handleBlur}
             tabIndex={0}
             className={focusedCardIndex === 0 ? 'Mui-focused' : ''}
+            
           >
+            <Box sx={{m:3,width:'3%'}} >
+              <Typography variant='h1' sx={{fontSize:'3rem'}}>{index+1}</Typography>
+            </Box>
+            
             <Link
               to={`/songs/${encodeURIComponent(song.title)}`}
               style={{ textDecoration: 'none' }} // Remove default link styles
@@ -314,30 +279,37 @@ function Home() {
               component="img"
               alt="green iguana"
               image={song.thumbnailurl}
+              alignItems="center"
               sx={{
-                aspectRatio: '16 / 9',
+                aspectRatio: '8 / 6',
                 borderBottom: '1px solid',
                 borderColor: 'divider',
+                width:'60px',
+                height:'60px',
+                alignItems:'center',
+                justifyContent:'center',
+                m:'6px',
               }}
             />
             </Link>
-            <SyledCardContent>
-              <Typography gutterBottom variant="caption" component="div">
-                {song.singer}
-              </Typography>
+            <SyledCardContent >
+             
               <Typography gutterBottom variant="h6" component="div">
                 {song.title}
               </Typography>
+              <Typography gutterBottom variant="caption" component="div">
+                {song.singer}
+              </Typography>
             </SyledCardContent>
-            
             <Author authors={cardData[index].authors} />
-          </SyledCard>
-          
-        </Grid>
-        
+          </SyledCard>  
+        //</Grid>
         
         ))}
-      </Grid>
+      </Box>
+      
+      {//</Grid>
+      }
     </Box>
   );
 }

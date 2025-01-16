@@ -66,14 +66,18 @@ function MenuComponent() {
         console.error('Error signing out:', error);
       });
   };
+  const handleProfile=() => {
+    navigate('/dashboard/')
+  }
   const settings = [
-    {name:t('setting.profile')},
+    {name:t('setting.profile'), onClick: handleProfile},
     {name:t('setting.setting')}, 
     {name:t('setting.logout'),onClick:  handleLogout}
   ];
   const pages = [
     { name: t('pages.home'), link: '/' },
-    { name: t('pages.songs'), link: '/songs' },
+    { name: t('pages.contributor'), link: '/contributor' },
+    { name: t('pages.songs'), link: '/songs'},
     { name: t('pages.artist'), link: '/artists' },
     { name: t('pages.about'), link: '/about' }
   ];
@@ -117,6 +121,7 @@ function MenuComponent() {
     navigate('/signin');
   };
   
+  
   return (
     <AppBar position="fixed"
     enableColorOnDark
@@ -131,7 +136,7 @@ function MenuComponent() {
       <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
         <MyIcon component="a"href="/"/>
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <Button variant="text" color="info" size="small">སྦྲང་ཚང་།</Button>
+          
           {pages.map((page) => (
               <Button
                 key={page.name}
