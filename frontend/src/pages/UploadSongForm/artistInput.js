@@ -1,33 +1,41 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemText } from '@mui/material';
-import {  collection, addDoc,  query, where, getDocs,getFirestore } from 'firebase/firestore';
-
+import { collection, addDoc, getDocs, getFirestore } from 'firebase/firestore';
 
 const db = getFirestore();
 
-const ArtistInput = ({ labelTibetan, labelEnglish, nameTibetan, nameEnglish, valueTibetan, valueEnglish, onChange, onSave }) => {
+const ArtistInput = ({ labelTibetan, labelEnglish, nameTibetan, nameEnglish, valueTibetan, valueEnglish, onChange, onSave,required }) => {
   const [open, setOpen] = useState(false);
   const [newArtistTibetan, setNewArtistTibetan] = useState('');
   const [newArtistEnglish, setNewArtistEnglish] = useState('');
+  const [allArtists, setAllArtists] = useState([]);
   const [filteredArtists, setFilteredArtists] = useState([]);
   const [searchField, setSearchField] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [addingNew, setAddingNew] = useState(false);
 
   useEffect(() => {
+    const fetchArtists = async () => {
+      const querySnapshot = await getDocs(collection(db, 'artists'));
+      const artists = [];
+      querySnapshot.forEach((doc) => {
+        artists.push({ id: doc.id, ...doc.data() });
+      });
+      setAllArtists(artists);
+    };
+    fetchArtists();
+  }, []);
+
+  useEffect(() => {
     if (open && !addingNew) {
-      const searchArtists = async () => {
-        const q = query(collection(db, 'artists'), where(searchField === 'tibetan' ? 'nameTibetan' : 'nameEnglish', '==', searchValue));
-        const querySnapshot = await getDocs(q);
-        const matches = [];
-        querySnapshot.forEach((doc) => {
-          matches.push({ id: doc.id, ...doc.data() });
-        });
-        setFilteredArtists(matches);
-      };
-      searchArtists();
+      const matches = allArtists.filter((artist) =>
+        searchField === 'tibetan'
+          ? artist.nameTibetan.toLowerCase().includes(searchValue.toLowerCase())
+          : artist.nameEnglish.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredArtists(matches);
     }
-  }, [open, searchField, searchValue, addingNew]);
+  }, [open, searchField, searchValue, addingNew, allArtists]);
 
   const handleOpen = (field) => {
     setSearchField(field);
@@ -52,6 +60,7 @@ const ArtistInput = ({ labelTibetan, labelEnglish, nameTibetan, nameEnglish, val
 
   const handleSelectArtist = (artist) => {
     onSave(artist);
+    console.log('Selected Artist:', artist);
     handleClose();
   };
 
@@ -66,15 +75,15 @@ const ArtistInput = ({ labelTibetan, labelEnglish, nameTibetan, nameEnglish, val
   };
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', gap: 2 }}>
       <TextField
         label={labelTibetan}
         name={nameTibetan}
         value={valueTibetan}
         onChange={onChange}
         onClick={() => handleOpen('tibetan')}
-        required
-        sx={{ width: '40%' }}
+        required={required}
+        sx={{ width: '30%' }}
         variant="filled"
       />
       <TextField
@@ -83,7 +92,7 @@ const ArtistInput = ({ labelTibetan, labelEnglish, nameTibetan, nameEnglish, val
         value={valueEnglish}
         onChange={onChange}
         onClick={() => handleOpen('english')}
-        sx={{ width: '40%' }}
+        sx={{ width: '30%' }}
         variant="filled"
       />
       <Dialog open={open} onClose={handleClose}>

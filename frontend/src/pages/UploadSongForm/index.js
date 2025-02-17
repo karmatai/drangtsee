@@ -65,7 +65,6 @@ function UploadSongForm() {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [artistData, setArtistData] = useState(initialArtistData);
-  const [selectedArtist, setSelectedArtist] = useState(null);
   const [isNewArtist, setIsNewArtist] = useState(false);
 
   const extractYouTubeThumbnail = (youtubeUrl) => {
@@ -103,19 +102,20 @@ function UploadSongForm() {
     try {
       const user = auth.currentUser;
       if (user) {
-        let artistId = selectedArtist ? selectedArtist.id : null;
+        let artistId = formData.artistId;
 
         if (isNewArtist) {
           const artistDocRef = await addDoc(collection(db, 'artists'), artistData);
           artistId = artistDocRef.id;
         }
 
-        await addDoc(collection(db, 'songs'), {
+        const songDocRef = await addDoc(collection(db, 'songs'), {
           ...formData,
           coverPhotoUrl,
           userId: user.uid,
           artistId,
           timestamp: new Date(),
+          contributedBy: user.displayName || user.email,
         });
 
         const userRef = doc(db, 'users', user.uid);
@@ -124,29 +124,60 @@ function UploadSongForm() {
           await setDoc(userRef, {
             points: 0,
             lyricsCount: 0,
-            milestoneReached: false,
+            artistCount: 0,
+            milestone: 0,
+            contributions: [],
           });
         }
 
         await updateDoc(userRef, {
           points: increment(10),
           lyricsCount: increment(1),
+          contributions: increment({
+            contribution_type: 'upload',
+            song_id: songDocRef.id,
+            song_name_eng: formData.titleEnglish,
+            song_name_tib: formData.titleTibetan,
+          }),
         });
+
+        if (isNewArtist) {
+          await updateDoc(userRef, {
+            artistCount: increment(1),
+          });
+        }
 
         const updatedUserDoc = await getDoc(userRef);
         const userData = updatedUserDoc.data();
-        if (userData.lyricsCount >= 5 && !userData.milestoneReached) {
-          await updateDoc(userRef, {
-            milestoneReached: true,
-          });
-          console.log('Milestone reached!');
-        }
+        if (userData) {
+          let milestoneMessageEng = '';
+          let milestoneMessageTib = '';
 
+          if (userData.points >= 100 && userData.points % 100 === 0) {
+            milestoneMessageEng = `Earned ${userData.points} bee points`;
+            milestoneMessageTib = `སྦྲང་རྩིའི་སྐར་གྲངས་་ ${userData.points} ཐམ་པ་ཐོབ།`
+          } else if (userData.lyricsCount >= 5 && userData.lyricsCount % 5 === 0) {
+            milestoneMessageEng = `གཞས་ཚིག་ ${userData.lyricsCount}ཐམ་པ་བླུགས།`;
+            milestoneMessageTib =`${userData.lyricscount}`;
+          } else if (userData.artistCount >= 5 && userData.artistCount % 5 === 0) {
+            milestoneMessageEng = `Uploaded ${userData.artistCount} artists`;
+            milestoneMessageTib =`གླུ་པ་ ${userData.lyricscount}ཐམ་པ་བླུགས།`;
+          } else if (userData.lyricsCount === 1) {
+            milestoneMessageEng = 'Uploaded your first song';
+            milestoneMessageTib =`གཞས་ཚིག་དང་པོ་དེ་བླུགས།`;
+          } else if (userData.artistCount === 1) {
+            milestoneMessageEng = 'Uploaded your first artist';
+            milestoneMessageTib =`གླུ་པ་དང་པོ་དེ་བླུགས`;
+          }
+          await updateDoc(userRef, {
+            milestone: {milestoneMessageEng:milestoneMessageEng,milestoneMessageTib:milestoneMessageTib}
+          });
+          console.log('New milestone reached!');
+        }
         setSnackbarMessage('Song uploaded successfully! You have been awarded 10 bee points.');
         setSnackbarOpen(true);
         setFormData(initialFormData);
         setArtistData(initialArtistData);
-        setSelectedArtist(null);
         setIsNewArtist(false);
         console.log('Song uploaded successfully');
       } else {
@@ -172,25 +203,18 @@ function UploadSongForm() {
     </Typography>
     <form onSubmit={handleSubmit}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }} noValidate autoComplete="off">
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <TextField
-            label={t('by') + ' (བོད།) *'}
-            name="artistTibetan"
-            value={formData.artistTibetan}
-            onChange={handleChange}
-            required
-            sx={{ width: '40%' }}
-            variant="filled"
-          />
-          <TextField
-            label={t('by') + ' (English)'}
-            name="artistEnglish"
-            value={formData.artistEnglish}
-            onChange={handleChange}
-            sx={{ width: '40%' }}
-            variant="filled"
-          />
-        </Box>
+      <ArtistInput
+          labelTibetan="Artist (བོད།)"
+          labelEnglish="Artist (English)"
+          nameTibetan="artistTibetan"
+          nameEnglish="artistEnglish"
+          valueTibetan={formData.artistTibetan}
+          valueEnglish={formData.artistEnglish}
+          width="40%"
+          onChange={handleChange}
+          onSave={(artist) => handleSave(artist, 'artist')}
+          required
+        />
         <Box sx={{ display: 'flex', gap: 2, flexDirection: isSm ? 'column' : 'row' }}>
           <TextField
             label={t('title') + ' (བོད།) *'}
@@ -264,43 +288,6 @@ function UploadSongForm() {
             variant="filled"
           />
         </Box>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <TextField
-            label={t('featuring') + ' (བོད།)'}
-            name="featuringTibetan"
-            value={formData.featuringTibetan}
-            onChange={handleChange}
-            width="40%"
-            variant="filled"
-          />
-          <TextField
-            label={t('featuring') + ' (English)'}
-            name="featuringEnglish"
-            value={formData.featuringEnglish}
-            onChange={handleChange}
-            width="40%"
-            variant="filled"
-          />
-        </Box>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <TextField
-            label={t('composer') + ' (བོད།)'}
-            name="composerTibetan"
-            value={formData.composerTibetan}
-            onChange={handleChange}
-            width="40%"
-            variant="filled"
-          />
-          <TextField
-            label={t('composer') + ' (English)'}
-            name="composerEnglish"
-            value={formData.composerEnglish}
-            onChange={handleChange}
-            width="40%"
-            variant="filled"
-          />
-        </Box>
-        <Box sx={{ display: 'flex', gap: 2 }}>
         <ArtistInput
           labelTibetan="Featuring (བོད།)"
           labelEnglish="Featuring (English)"
@@ -308,46 +295,42 @@ function UploadSongForm() {
           nameEnglish="featuringEnglish"
           valueTibetan={formData.featuringTibetan}
           valueEnglish={formData.featuringEnglish}
+          width="40%"
           onChange={handleChange}
           onSave={(featuring) => handleSave(featuring, 'featuring')}
         />
-      </Box>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <TextField
-            label={t('producers') + ' (བོད།)'}
-            name="producersTibetan"
-            value={formData.producersTibetan}
-            onChange={handleChange}
-            width="40%"
-            variant="filled"
-          />
-          <TextField
-            label={t('producers') + ' (English)'}
-            name="producersEnglish"
-            value={formData.producersEnglish}
-            onChange={handleChange}
-            width="40%"
-            variant="filled"
-          />
-        </Box>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <TextField
-            label={t('writers') + ' (བོད།)'}
-            name="writersTibetan"
-            value={formData.writersTibetan}
-            onChange={handleChange}
-            width="40%"
-            variant="filled"
-          />
-          <TextField
-            label={t('writers') + ' (English)'}
-            name="writersEnglish"
-            value={formData.writersEnglish}
-            onChange={handleChange}
-            width="40%"
-            variant="filled"
-          />
-        </Box>
+        <ArtistInput
+          labelTibetan="Composer (བོད།)"
+          labelEnglish="Composer (English)"
+          nameTibetan="composerTibetan"
+          nameEnglish="composerEnglish"
+          valueTibetan={formData.composerTibetan}
+          valueEnglish={formData.composerEnglish}
+          width="40%"
+          onChange={handleChange}
+          onSave={(composer) => handleSave(composer, 'composer')}
+        />
+        <ArtistInput
+          labelTibetan="Producer (བོད།)"
+          labelEnglish="Producer (English)"
+          nameTibetan="producerTibetan"
+          nameEnglish="producerEnglish"
+          valueTibetan={formData.producersTibetan}
+          valueEnglish={formData.producersEnglish}
+          width="40%"
+          onChange={handleChange}
+          onSave={(producer) => handleSave(producer, 'producer')}
+        />
+        <ArtistInput
+          labelTibetan="Writers (བོད།)"
+          labelEnglish="Writers (English)"
+          nameTibetan="writersTibetan"
+          nameEnglish="writersEnglish"
+          valueTibetan={formData.writersTibetan}
+          valueEnglish={formData.writersEnglish}
+          onChange={handleChange}
+          onSave={(featuring) => handleSave(featuring, 'featuring')}
+        />
         <TextField
           label={t('soundcloudUrl')}
           name="soundcloudUrl"
@@ -363,6 +346,7 @@ function UploadSongForm() {
           onChange={handleChange}
           sx={{ width: isSm ? '25rem' : '40rem' }}
           variant="filled"
+          required
         />
         <Box sx={{ display: 'flex', gap: 2, flexDirection: isSm ? 'column' : 'row' }}>
           <TextField

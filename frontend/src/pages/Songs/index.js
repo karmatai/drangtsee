@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid2';
+import  {Link as RouterLink} from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
+import Link from "@mui/material/Link";
 
 const db = getFirestore();
 
@@ -68,13 +69,11 @@ function Songs() {
           <Grid container spacing={2}>
             {groupedSongs[initialLetter].map((song, index) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                <Link to={`/songs/${song.id}`} style={{ textDecoration: 'none' }}>
                   <StyledCard>
-                    <Typography variant="h6" component="div">
+                    <Link to={`/songs/${song.id}`} component={RouterLink} variant="body2"  color='inherit' underline="none">
                       {i18n.language === 'eng' ? song.titleEnglish || song.titleTibetan : song.titleTibetan}
-                    </Typography>
+                    </Link>
                   </StyledCard>
-                </Link>
               </Grid>
             ))}
           </Grid>

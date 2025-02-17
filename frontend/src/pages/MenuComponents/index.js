@@ -15,7 +15,7 @@ import logo from '../../logo.jpg';
 import { useTranslation } from 'react-i18next';
 import Switch from '@mui/material/Switch';
 import { useState,useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { Route, useNavigate } from 'react-router-dom'; 
 import { auth, onAuthStateChanged, logout } from '../../firebase_setup/firebase';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { alpha, styled } from '@mui/material/styles';
@@ -23,6 +23,7 @@ import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 import Drawer from '@mui/material/Drawer';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Divider from '@mui/material/Divider';
+import {Link as RouterLink} from 'react-router-dom';
 
 
 const MyIcon = () => (
@@ -140,7 +141,8 @@ function MenuComponent() {
           {pages.map((page) => (
               <Button
                 key={page.name}
-                href={page.link}
+                to={page.link}
+                component={RouterLink}
                 onClick={handleCloseNavMenu}
                 variant="text" color="info" size="small"
               >

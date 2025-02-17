@@ -16,7 +16,9 @@ import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
 import { GoogleIcon, FacebookIcon } from './CustomIcons';
 import AppTheme from '../../shared-theme/AppTheme';
+import { useNavigate } from 'react-router-dom';
 import { signInWithGoogle, logInWithEmailAndPassword, sendPasswordReset } from '../../firebase_setup/firebase';
+
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -66,6 +68,7 @@ export default function SignIn(props) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -84,6 +87,13 @@ export default function SignIn(props) {
     const email = data.get('email');
     const password = data.get('password');
     await logInWithEmailAndPassword(email, password);
+    navigate('/');
+  };
+
+  const handleGoogleSignIn = async (event) => {
+    event.preventDefault();
+    await signInWithGoogle();
+    navigate('/');
   };
 
   const validateInputs = () => {
@@ -198,7 +208,7 @@ export default function SignIn(props) {
             <Button
               fullWidth
               variant="outlined"
-              onClick={signInWithGoogle}
+              onClick={handleGoogleSignIn}
               startIcon={<GoogleIcon />}
             >
               Sign in with Google
@@ -223,6 +233,7 @@ export default function SignIn(props) {
             </Typography>
           </Box>
         </Card>
+        
       </SignInContainer>
     </AppTheme>
   );

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Box, Typography, Card,  CircularProgress, Divider } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Box, Typography, Card } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import {  styled } from '@mui/material/styles';
-import ListItem from '@mui/material/ListItem';
 import Grid from '@mui/material/Grid2';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import latestLyrics from '../latestLyrics'; 
+import { collection, getDocs, query } from 'firebase/firestore';import { db } from '../../firebase_setup/firebase';
+import logo from '../../logo.jpg';
+import { useTranslation } from 'react-i18next';
 
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -34,22 +33,23 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 function Artist() {
-  const [sortedSongs, setSortedSongs] = useState([]);
+  const [sortedArtist, setSortedArtist] = useState([]);
+  const { i18n } = useTranslation();
+
+  const getField = (field,song) => {
+    return i18n.language === 'eng' ? song[field + 'English'] || song[field + 'Tibetan'] : song[field + 'Tibetan'];
+  };
+
 
   useEffect(() => {
     // Simulate data fetching
-    const fetchData = async () => {
-      try {
-        const response = await new Promise((resolve) => {
-          setTimeout(() => resolve(latestLyrics), 1000); // Simulated delay
-        });
-        setSortedSongs(response);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchData();
+    const fetchArtists = async () => {
+    const q = query(collection(db, 'artists'));
+    const querySnapshot = await getDocs(q);
+    const sortedArtist = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setSortedArtist(sortedArtist);
+    }
+    fetchArtists();
   }, []);
 
   return (
@@ -58,15 +58,15 @@ function Artist() {
         ཁ་ག་རི་པའི་སྒྲགས་ཅན་རྒྱུ་རྩལ་པ།
       </Typography>
       <Grid container spacing={1} columns={12}>
-        {sortedSongs.map((song, songIndex) => (
+        {sortedArtist.map((artist, songIndex) => (
           <Grid item xs={6} md={3} key={songIndex}>
-            <Link to={`/artists/${encodeURIComponent(song.singer)}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/artists/${encodeURIComponent(artist.id)}`} style={{ textDecoration: 'none' }}>
             <StyledCard>
                 <Box display={'flex'} flexDirection={'column'}>
-                  <Typography variant='h2'>{song.singer}</Typography>
-                  <Typography variant='body2'>1234,34</Typography>
+                  <Typography variant='body2'>{getField('name',artist)}</Typography>
+                  <Typography variant='body2'>1,200</Typography>
                 </Box>
-                <Avatar src={song.thumbnailurl} variant='square' />
+                <Avatar src="https://example.com/artist-thumbnail.jpg" variant='square' />
             </StyledCard>
             </Link>
           </Grid>

@@ -15,7 +15,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../../shared-theme/AppTheme';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
-import ColorModeSelect from '../../shared-theme/ColorModeSelect';
+import { useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -66,6 +66,7 @@ export default function SignUp(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [nameError, setNameError] = React.useState(false);
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const navigate = useNavigate();
 
   const validateInputs = () => {
     const email = document.getElementById('email');
@@ -116,6 +117,7 @@ export default function SignUp(props) {
       email: data.get('email'),
       password: data.get('password'),
     });
+    navigate('/');
   };
 
   return (

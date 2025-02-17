@@ -16,6 +16,7 @@ import UploadSongForm from './pages/UploadSongForm';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import AppTheme from './shared-theme/AppTheme';
+import EditArtist from './pages/EditArtist';
 import './App.css';
 import './i18n'; 
 
@@ -39,10 +40,11 @@ function App(props) {
             <Route path="/about" element={<AboutUs />} />
             <Route path='/songs' element={<Songs />}/>
             <Route path="/songs/:id" element={<SongDetail />} />
-            <Route path="/artist/:singer" element={<ArtistDetailPage />}/>
+            <Route path="/artists/:id" element={<ArtistDetailPage />}/>
             <Route path='/signin' element={<SignIn/>}/>
             <Route path='/signup' element={<SignUp/>}/>
             <Route path='/addsong' element={<UploadSongForm/>}/>
+            <Route path='/edit-artist/:id' element={<EditArtist/>}/>
           </Routes>
         </Container>
         <Footer/>

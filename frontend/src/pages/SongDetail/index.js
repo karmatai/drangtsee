@@ -14,6 +14,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { getFirestore, doc, getDoc, updateDoc, increment, arrayUnion } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { useTranslation } from 'react-i18next';
+import Link from '@mui/material/Link';
 
 const db = getFirestore();
 const auth = getAuth();
@@ -82,6 +83,8 @@ function SongDetail() {
     fetchSong();
   }, [id]);
 
+  
+
   useEffect(() => {
     const user = auth.currentUser;
     setIsLoggedIn(!!user);
@@ -146,9 +149,12 @@ function SongDetail() {
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems={isSmallScreen ? 'center' : 'flex-start'}>
             <Typography variant='h1' gutterBottom>{getField('title')}</Typography>
             <Box display="flex" flexDirection="row" alignItems="center" gap={1}>
-              <Typography variant='body2' gutterBottom>{getField('artist')}</Typography>
-              <Typography variant='body2' gutterBottom>{getField('featuring')}</Typography>
-              <Typography variant='body2' gutterBottom>{getField('composer')}</Typography>
+            <Link href={`/artist/${song.artistId}`} variant='body2'  color="inherit" >
+            {getField('artist')}
+            </Link>
+            <Link href={`/artist/${song.writersId}`} variant='body2'  color="inherit" >{getField('writers')}</Link>
+            <Link href={`/artist/${song.featuringId}`} variant='body2'  color="inherit" >{getField('featuring')}</Link>
+            <Link href={`/artist/${song.composerId}`} variant='body2'  color="inherit" >{getField('composer')}</Link>
             </Box>
           </Box>
         </Grid>
